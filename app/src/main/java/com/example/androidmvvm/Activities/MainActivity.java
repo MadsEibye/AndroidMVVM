@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
     //TODO Add date picker to UI so user can choose date for search parameter
     //TODO Implement search function
     //TODO Show Image of article in Recyclerview
-    
+
     private TextView.OnEditorActionListener editorListener = (v, actionId, event) -> {
         switch (actionId){
             case EditorInfo.IME_ACTION_SEARCH:
