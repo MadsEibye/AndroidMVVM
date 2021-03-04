@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     String dateString;
     Button button;
     TextView dateText;
+    static String APIKEY = "97ee24f1795348b6a7a1e234a11999d3";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear,
                               int dayOfMonth) {
-            // TODO Auto-generated method stub
             myCalendar.set(Calendar.YEAR, year);
             myCalendar.set(Calendar.MONTH, monthOfYear);
             myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
@@ -85,7 +85,6 @@ public class MainActivity extends AppCompatActivity {
     };
 
     public void buttonClicked(View v) {
-        // TODO Auto-generated method stub
         new DatePickerDialog(MainActivity.this, datePicker, myCalendar
                 .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                 myCalendar.get(Calendar.DAY_OF_MONTH)).show();
@@ -114,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
         if (query == null) {
             Toast.makeText(MainActivity.this, "You have to search for something", Toast.LENGTH_LONG).show();
         } else {
-            String q = "https://newsapi.org/v2/everything?q=" + query + "&from=" + dateString + "&sortBy=popularity&apiKey=97ee24f1795348b6a7a1e234a11999d3";
+            String q = "https://newsapi.org/v2/everything?q=" + query + "&from=" + dateString + "&sortBy=popularity&apiKey="+APIKEY;
             NewsService newsService = ApiUtils.getNewsService();
             Call<Paging> searchForNews = newsService.GetNews(q);
             searchForNews.enqueue(new Callback<Paging>() {
