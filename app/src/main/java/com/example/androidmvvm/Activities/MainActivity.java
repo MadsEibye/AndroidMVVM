@@ -76,14 +76,12 @@ public class MainActivity extends AppCompatActivity {
                         populateRecyclerView(allNews);
                         if (allNews.size() == 0){
                             MainMessage.setText("No news matched your search");
-                            hideKeyboardFrom(MainActivity.this, MainMessage);
-                            searchQuery.setText("");
                         }
                         else {
                         MainMessage.setText("Search successful");
+                        }
                         hideKeyboardFrom(MainActivity.this, MainMessage);
                         searchQuery.setText("");
-                        }
                     }
                 }
 
