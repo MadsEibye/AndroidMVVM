@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         searchQuery = findViewById(R.id.MainSearch);
         searchQuery.setOnEditorActionListener(editorListener);
+        searchQuery.setHintTextColor(getResources().getColor(R.color.white));
         MainMessage = findViewById(R.id.ResponseMessage);
     }
 
@@ -56,11 +58,12 @@ public class MainActivity extends AppCompatActivity {
     };
 
     public void searchForNews() {
-        //String q = searchQuery.getText().toString();
-        String q = "https://newsapi.org/v2/everything?q=Apple&from=2021-03-03&sortBy=popularity&apiKey=97ee24f1795348b6a7a1e234a11999d3";
-        if (q == null) {
+        String query = searchQuery.getText().toString().trim();
+
+        if (query == null) {
             Toast.makeText(MainActivity.this, "You have to search for something", Toast.LENGTH_LONG).show();
         } else {
+            String q = "https://newsapi.org/v2/everything?q="+ query + "&from=2021-03-03&sortBy=popularity&apiKey=97ee24f1795348b6a7a1e234a11999d3";
             NewsService newsService = ApiUtils.getNewsService();
             Call<Paging> searchForNews = newsService.GetNews(q);
             searchForNews.enqueue(new Callback<Paging>() {
@@ -71,10 +74,16 @@ public class MainActivity extends AppCompatActivity {
                         List<News> allNews = response.body().getArticles();
                         Log.d("Tracks", allNews.toString());
                         populateRecyclerView(allNews);
+                        if (allNews.size() == 0){
+                            MainMessage.setText("No news matched your search");
+                            hideKeyboardFrom(MainActivity.this, MainMessage);
+                            searchQuery.setText("");
+                        }
+                        else {
                         MainMessage.setText("Search successful");
                         hideKeyboardFrom(MainActivity.this, MainMessage);
                         searchQuery.setText("");
-
+                        }
                     }
                 }
 

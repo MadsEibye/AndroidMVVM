@@ -3,23 +3,27 @@ package com.example.androidmvvm.Adapters;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.androidmvvm.Models.News;
+import com.example.androidmvvm.R;
+
 import java.util.List;
 
-public class RecyclerViewSimpleAdapter<T> extends RecyclerView.Adapter<RecyclerViewSimpleAdapter<T>.MyViewHolder> {
+public class RecyclerViewSimpleAdapter<T> extends RecyclerView.Adapter<RecyclerViewSimpleAdapter<T>.ViewHolder> {
     private static final String LOG_TAG = "Bookings";
     private final List<T> data;
     private OnItemClickListener onItemClickListener;
     private final int viewId = View.generateViewId();
-
     public RecyclerViewSimpleAdapter(List<T> data) {
         this.data = data;
         Log.d(LOG_TAG, data.toString());
@@ -27,32 +31,19 @@ public class RecyclerViewSimpleAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
     @NonNull
     @Override
-    public RecyclerViewSimpleAdapter<T>.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = makeView(parent.getContext());
-        Log.d(LOG_TAG, v.toString());
-        MyViewHolder vh = new MyViewHolder(v);
+    public RecyclerViewSimpleAdapter<T>.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_item, parent, false);
+        ViewHolder vh = new ViewHolder(v);
         return vh;
     }
 
-    private View makeView(Context context) {
-        ViewGroup.LayoutParams params =
-                new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT);
-        LinearLayout layout = new LinearLayout(context);
-        layout.setOrientation(LinearLayout.VERTICAL);
-        TextView textView = new TextView(context);
-        textView.setId(viewId);
-        textView.setLayoutParams(params);
-        layout.addView(textView);
-        return layout;
-    }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         T dataItem = data.get(position);
         Log.d(LOG_TAG, "onBindViewHolder " + data.toString());
-        holder.view.setText(dataItem.toString());
-        holder.view.setTextColor(Color.parseColor("#000000"));
+        holder.mTv_name.setText(dataItem.toString());
+        holder.mTv_name.setTextColor(Color.parseColor("#FFFFFF"));
         Log.d(LOG_TAG, "onBindViewHolder called " + position);
     }
 
@@ -71,14 +62,15 @@ public class RecyclerViewSimpleAdapter<T> extends RecyclerView.Adapter<RecyclerV
         void onItemClick(View view, int position, T item);
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        final TextView view;
-
-        MyViewHolder(@NonNull final View itemView) {
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        public TextView mTv_name;
+        public ImageView mImg;
+        public ViewHolder(View itemView) {
             super(itemView);
-            view = itemView.findViewById(viewId);
-            view.setOnClickListener(this);
+            mTv_name = (TextView) itemView.findViewById(R.id.tv_name);
+            mImg = (ImageView) itemView.findViewById(R.id.img_item);
         }
+
 
         @Override
         public void onClick(View view) {
@@ -88,3 +80,4 @@ public class RecyclerViewSimpleAdapter<T> extends RecyclerView.Adapter<RecyclerV
         }
     }
 }
+

@@ -110,4 +110,5 @@ public class News {
         return title + "\n" + author + "\n" + publishedAt + "\n";
 
     }
+
 }

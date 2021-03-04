@@ -5,10 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/grey"
     tools:context=".Activities.MainActivity">
 
     <EditText
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:inputType="text"
         android:imeOptions="actionSearch"
         android:id="@+id/MainSearch"
@@ -18,8 +19,8 @@
         android:layout_height="wrap_content"/>
 
     <TextView
-        android:textColorHint="@color/black"
-        android:textColor="@color/black"
+        android:textColorHint="@color/white"
+        android:textColor="@color/white"
         android:layout_marginBottom="5dp"
         android:id="@+id/ResponseMessage"
         android:layout_gravity="center"
