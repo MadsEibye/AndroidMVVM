@@ -3,6 +3,11 @@ package com.example.androidmvvm.Models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 public class News {
 
     @SerializedName("source")
@@ -90,8 +95,18 @@ public class News {
     }
 
     public String getPublishedAt() {
-        return publishedAt;
+        String publishedAtFormatted = "";
+        try {
+            String[] strings;
+            strings = publishedAt.split("T");
+            publishedAtFormatted = strings[0];
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return publishedAtFormatted;
     }
+
 
     public void setPublishedAt(String publishedAt) {
         this.publishedAt = publishedAt;

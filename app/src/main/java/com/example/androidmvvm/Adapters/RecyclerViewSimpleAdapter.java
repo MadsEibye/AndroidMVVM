@@ -2,6 +2,7 @@ package com.example.androidmvvm.Adapters;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import java.net.URI;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -16,15 +19,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.androidmvvm.Models.News;
 import com.example.androidmvvm.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 public class RecyclerViewSimpleAdapter<T> extends RecyclerView.Adapter<RecyclerViewSimpleAdapter<T>.ViewHolder> {
     private static final String LOG_TAG = "Bookings";
-    private final List<T> data;
+    private final List<News> data;
     private OnItemClickListener onItemClickListener;
     private final int viewId = View.generateViewId();
-    public RecyclerViewSimpleAdapter(List<T> data) {
+
+    public RecyclerViewSimpleAdapter(List<News> data) {
         this.data = data;
         Log.d(LOG_TAG, data.toString());
     }
@@ -40,10 +45,17 @@ public class RecyclerViewSimpleAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        T dataItem = data.get(position);
+        News dataItem = data.get(position);
         Log.d(LOG_TAG, "onBindViewHolder " + data.toString());
-        holder.mTv_name.setText(dataItem.toString());
-        holder.mTv_name.setTextColor(Color.parseColor("#FFFFFF"));
+        holder.Title.setText(dataItem.getTitle());
+        holder.Title.setTextColor(Color.parseColor("#FFFFFF"));
+        holder.Author.setText(dataItem.getAuthor());
+        holder.Author.setTextColor(Color.parseColor("#FFFFFF"));
+        holder.PublishedAt.setText(dataItem.getPublishedAt());
+        holder.PublishedAt.setTextColor(Color.parseColor("#FFFFFF"));
+        Uri myUri = Uri.parse(dataItem.getUrlToImage());
+        Picasso.get().load(myUri).into(holder.mImg);
+        Log.d("URISTRING",myUri.toString());
         Log.d(LOG_TAG, "onBindViewHolder called " + position);
     }
 
@@ -63,12 +75,16 @@ public class RecyclerViewSimpleAdapter<T> extends RecyclerView.Adapter<RecyclerV
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public TextView mTv_name;
+        public TextView Title;
+        public TextView Author;
+        public TextView PublishedAt;
         public ImageView mImg;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            mTv_name = (TextView) itemView.findViewById(R.id.tv_name);
+            Title = itemView.findViewById(R.id.title);
+            Author = itemView.findViewById(R.id.author);
+            PublishedAt = itemView.findViewById(R.id.publishedAt);
             mImg = (ImageView) itemView.findViewById(R.id.img_item);
             itemView.setOnClickListener(this);
         }
