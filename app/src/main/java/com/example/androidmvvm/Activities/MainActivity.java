@@ -24,6 +24,11 @@ import com.example.androidmvvm.R;
 import com.example.androidmvvm.REST.ApiUtils;
 import com.example.androidmvvm.REST.NewsService;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
@@ -34,7 +39,8 @@ public class MainActivity extends AppCompatActivity {
 
     EditText searchQuery;
     TextView MainMessage;
-
+    String date;
+    String dateString;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,10 +49,12 @@ public class MainActivity extends AppCompatActivity {
         searchQuery.setOnEditorActionListener(editorListener);
         searchQuery.setHintTextColor(getResources().getColor(R.color.white));
         MainMessage = findViewById(R.id.ResponseMessage);
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+        LocalDateTime now = LocalDateTime.now();
+        dateString = dtf.format(now);
     }
 
     //TODO Add date picker to UI so user can choose date for search parameter
-    //TODO Implement search function
     //TODO Show Image of article in Recyclerview
 
     private TextView.OnEditorActionListener editorListener = (v, actionId, event) -> {
@@ -63,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         if (query == null) {
             Toast.makeText(MainActivity.this, "You have to search for something", Toast.LENGTH_LONG).show();
         } else {
-            String q = "https://newsapi.org/v2/everything?q="+ query + "&from=2021-03-03&sortBy=popularity&apiKey=97ee24f1795348b6a7a1e234a11999d3";
+            String q = "https://newsapi.org/v2/everything?q="+ query + "&from="+ dateString +"&sortBy=popularity&apiKey=97ee24f1795348b6a7a1e234a11999d3";
             NewsService newsService = ApiUtils.getNewsService();
             Call<Paging> searchForNews = newsService.GetNews(q);
             searchForNews.enqueue(new Callback<Paging>() {

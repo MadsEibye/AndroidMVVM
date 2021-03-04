@@ -65,10 +65,12 @@ public class RecyclerViewSimpleAdapter<T> extends RecyclerView.Adapter<RecyclerV
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView mTv_name;
         public ImageView mImg;
+
         public ViewHolder(View itemView) {
             super(itemView);
             mTv_name = (TextView) itemView.findViewById(R.id.tv_name);
             mImg = (ImageView) itemView.findViewById(R.id.img_item);
+            itemView.setOnClickListener(this);
         }
 
 
