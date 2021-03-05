@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
         LocalDateTime now = LocalDateTime.now();
         dateString = dtf.format(now);
         button = findViewById(R.id.DatePicker);
+        button.setBackgroundColor(getResources().getColor(R.color.DarkGrey));
         dateText = findViewById(R.id.dateTextView);
         dateText.setText(dateString);
     }
@@ -151,6 +152,14 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         adapter.setOnItemClickListener((view, position, item) -> {
             Intent intent = new Intent(MainActivity.this, SingleNewsActivity.class);
+            intent.putExtra("Title",items.get(position).getTitle());
+            intent.putExtra("Author",items.get(position).getAuthor());
+            intent.putExtra("Description",items.get(position).getDescription());
+            intent.putExtra("SourceName",items.get(position).getSource().getName());
+            intent.putExtra("SourceId",items.get(position).getSource().getId());
+            intent.putExtra("Link",items.get(position).getUrl());
+            intent.putExtra("ImageUrl",items.get(position).getUrlToImage());
+            Log.d("TESTING", items.get(position).getAuthor());
             startActivity(intent);
         });
     }

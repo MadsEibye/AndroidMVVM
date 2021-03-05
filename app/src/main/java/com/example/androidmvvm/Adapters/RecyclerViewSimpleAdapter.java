@@ -24,7 +24,7 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 public class RecyclerViewSimpleAdapter<T> extends RecyclerView.Adapter<RecyclerViewSimpleAdapter<T>.ViewHolder> {
-    private static final String LOG_TAG = "Bookings";
+    private static final String LOG_TAG = "NEWS";
     private final List<News> data;
     private OnItemClickListener onItemClickListener;
     private final int viewId = View.generateViewId();
