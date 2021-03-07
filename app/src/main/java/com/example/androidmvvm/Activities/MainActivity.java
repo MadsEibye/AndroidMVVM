@@ -26,6 +26,7 @@ import com.example.androidmvvm.Models.Paging;
 import com.example.androidmvvm.R;
 import com.example.androidmvvm.REST.ApiUtils;
 import com.example.androidmvvm.REST.NewsService;
+import com.example.androidmvvm.ViewModels.MainViewModel;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -44,10 +45,11 @@ public class MainActivity extends AppCompatActivity {
 
     EditText searchQuery;
     TextView MainMessage;
-    String date;
     String dateString;
     Button button;
     TextView dateText;
+    RecyclerView recyclerView;
+    MainViewModel MainVM = new MainViewModel();
     static String APIKEY = "97ee24f1795348b6a7a1e234a11999d3";
 
     @Override
@@ -64,25 +66,17 @@ public class MainActivity extends AppCompatActivity {
         button = findViewById(R.id.DatePicker);
         button.setBackgroundColor(getResources().getColor(R.color.DarkGrey));
         dateText = findViewById(R.id.dateTextView);
+        recyclerView = findViewById(R.id.SearchResultRecyclerView);
         dateText.setText(dateString);
     }
 
-    //TODO Add date picker to UI so user can choose date for search parameter
-    //TODO Show Image of article in Recyclerview
-
     final Calendar myCalendar = Calendar.getInstance();
 
-
-    DatePickerDialog.OnDateSetListener datePicker = new DatePickerDialog.OnDateSetListener() {
-
-        @Override
-        public void onDateSet(DatePicker view, int year, int monthOfYear,
-                              int dayOfMonth) {
-            myCalendar.set(Calendar.YEAR, year);
-            myCalendar.set(Calendar.MONTH, monthOfYear);
-            myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-            updateLabel();
-        }
+    DatePickerDialog.OnDateSetListener datePicker = (view, year, monthOfYear, dayOfMonth) -> {
+        myCalendar.set(Calendar.YEAR, year);
+        myCalendar.set(Calendar.MONTH, monthOfYear);
+        myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        updateLabel();
     };
 
     public void buttonClicked(View v) {
@@ -99,75 +93,13 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
     private TextView.OnEditorActionListener editorListener = (v, actionId, event) -> {
         switch (actionId) {
             case EditorInfo.IME_ACTION_SEARCH:
-                searchForNews();
+                String query = searchQuery.getText().toString().trim();
+                MainVM.searchForNews(query, searchQuery, MainMessage, MainActivity.this, recyclerView, dateString, APIKEY, getApplicationContext());
         }
         return false;
     };
-
-    public void searchForNews() {
-        String query = searchQuery.getText().toString().trim();
-
-        if (query == null) {
-            Toast.makeText(MainActivity.this, "You have to search for something", Toast.LENGTH_LONG).show();
-        } else {
-            String q = "https://newsapi.org/v2/everything?q=" + query + "&from=" + dateString + "&sortBy=popularity&apiKey="+APIKEY;
-            NewsService newsService = ApiUtils.getNewsService();
-            Call<Paging> searchForNews = newsService.GetNews(q);
-            searchForNews.enqueue(new Callback<Paging>() {
-                @Override
-                public void onResponse(Call<Paging> call, Response<Paging> response) {
-                    if (response.isSuccessful()) {
-                        Log.d("Tracks", response.body().toString());
-                        List<News> allNews = response.body().getArticles();
-                        Log.d("Tracks", allNews.toString());
-                        populateRecyclerView(allNews);
-                        if (allNews.size() == 0) {
-                            MainMessage.setText("No news matched your search");
-                        } else {
-                            MainMessage.setText("Search successful");
-                        }
-                        hideKeyboardFrom(MainActivity.this, MainMessage);
-                        searchQuery.setText("");
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<Paging> call, Throwable t) {
-                    Toast.makeText(MainActivity.this, "FAIL", Toast.LENGTH_LONG).show();
-                    Log.d("FAIL", t.toString());
-                }
-            });
-        }
-    }
-
-
-    private void populateRecyclerView(List<News> items) {
-        RecyclerView recyclerView = findViewById(R.id.SearchResultRecyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        RecyclerViewSimpleAdapter adapter = new RecyclerViewSimpleAdapter<>(items);
-        recyclerView.setAdapter(adapter);
-        adapter.setOnItemClickListener((view, position, item) -> {
-            Intent intent = new Intent(MainActivity.this, SingleNewsActivity.class);
-            intent.putExtra("Title",items.get(position).getTitle());
-            intent.putExtra("Author",items.get(position).getAuthor());
-            intent.putExtra("Description",items.get(position).getDescription());
-            intent.putExtra("SourceName",items.get(position).getSource().getName());
-            intent.putExtra("SourceId",items.get(position).getSource().getId());
-            intent.putExtra("Link",items.get(position).getUrl());
-            intent.putExtra("ImageUrl",items.get(position).getUrlToImage());
-            Log.d("TESTING", items.get(position).getAuthor());
-            startActivity(intent);
-        });
-    }
-
-    public static void hideKeyboardFrom(Context context, View view) {
-        InputMethodManager imm = (InputMethodManager) context.getSystemService(MainActivity.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-    }
-
 }
 

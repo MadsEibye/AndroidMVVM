@@ -53,12 +53,18 @@ public class RecyclerViewSimpleAdapter<T> extends RecyclerView.Adapter<RecyclerV
         holder.Author.setTextColor(Color.parseColor("#FFFFFF"));
         holder.PublishedAt.setText(dataItem.getPublishedAt());
         holder.PublishedAt.setTextColor(Color.parseColor("#FFFFFF"));
+        if (dataItem.getUrlToImage() == null) {
+            dataItem.setUrlToImage("https://4.bp.blogspot.com/-OCutvC4wPps/XfNnRz5PvhI/AAAAAAAAEfo/qJ8P1sqLWesMdOSiEoUH85s3hs_vn97HACLcBGAsYHQ/s1600/no-image-found-360x260.png");
+        }
         Uri myUri = Uri.parse(dataItem.getUrlToImage());
-        Picasso.get().load(myUri).into(holder.mImg);
-        Log.d("URISTRING",myUri.toString());
+        try {
+            Picasso.get().load(myUri).into(holder.mImg);
+        } catch (Exception e) {
+            Log.d("URISTRINGFAIL", myUri.toString());
+        }
         Log.d(LOG_TAG, "onBindViewHolder called " + position);
-    }
 
+    }
     @Override
     public int getItemCount() {
         int count = data.size();
