@@ -68,6 +68,7 @@ public class MainViewModel {
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
+    //TODO Check for too large bitmaps to avoid crashes
     private void populateRecyclerView(List<News> items, RecyclerView recyclerView, Activity activity, Context context) {
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         RecyclerViewSimpleAdapter adapter = new RecyclerViewSimpleAdapter<>(items);
