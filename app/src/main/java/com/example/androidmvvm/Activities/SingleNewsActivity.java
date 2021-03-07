@@ -44,6 +44,10 @@ public class SingleNewsActivity extends AppCompatActivity {
     }
 
     private void PopulateActivity(){
+        if (ImageUrl != null) {
+        }
+        else { ImageUrl = "https://4.bp.blogspot.com/-OCutvC4wPps/XfNnRz5PvhI/AAAAAAAAEfo/qJ8P1sqLWesMdOSiEoUH85s3hs_vn97HACLcBGAsYHQ/s1600/no-image-found-360x260.png";
+        }
         Picasso.get().load(ImageUrl).into(imageView);
         TitleTV.setText(Title);
         AuthorTv.setText(Author);

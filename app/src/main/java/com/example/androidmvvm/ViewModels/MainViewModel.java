@@ -81,7 +81,6 @@ public class MainViewModel {
             intent.putExtra("SourceId",items.get(position).getSource().getId());
             intent.putExtra("Link",items.get(position).getUrl());
             intent.putExtra("ImageUrl",items.get(position).getUrlToImage());
-            Log.d("TESTING", items.get(position).getAuthor());
             activity.startActivity(intent);
         });
     }
